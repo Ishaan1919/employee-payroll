@@ -1,9 +1,11 @@
 package com.birdgelabz.employee_payroll.controller;
 
 import com.birdgelabz.employee_payroll.dto.EmployeeDTO;
+import com.birdgelabz.employee_payroll.dto.ResponseDTO;
 import com.birdgelabz.employee_payroll.model.EmployeeModel;
 import com.birdgelabz.employee_payroll.service.EmployeeServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
@@ -22,11 +24,10 @@ public class EmployeeController {
     }
 
     @PostMapping("/create-employee")
-    public String createEmployee(@RequestBody EmployeeDTO employee){
+    public ResponseEntity<EmployeeModel> createEmployee(@RequestBody EmployeeDTO employee){
 
-        employeeService.saveEmployeeToDatabase(employee);
+        return employeeService.saveEmployeeToDatabase(employee);
 
-        return "Employee has been successfully created";
     }
 
     @GetMapping("/get-employee-by-id/{id}")
@@ -48,16 +49,14 @@ public class EmployeeController {
     }
 
     @PutMapping("/update-employee-by-id/{id}")
-    public String updateEmployeeById(@PathVariable Long id, @RequestBody EmployeeDTO employee){
-        employeeService.updateEmployeeByIdService(id,employee);
-        return "Your employee has been updated";
+    public ResponseDTO updateEmployeeById(@PathVariable Long id, @RequestBody EmployeeDTO employee){
+        return employeeService.updateEmployeeByIdService(id,employee);
     }
 
     @DeleteMapping("/delete-employee-by-id/{id}")
     public String deleteUserById(@PathVariable Long id){
 
         employeeService.deleteUserByIdService(id);
-
         return "User has been deleted";
 
     }

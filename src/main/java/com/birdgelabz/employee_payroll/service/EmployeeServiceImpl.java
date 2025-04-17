@@ -1,9 +1,12 @@
 package com.birdgelabz.employee_payroll.service;
 
 import com.birdgelabz.employee_payroll.dto.EmployeeDTO;
+import com.birdgelabz.employee_payroll.dto.ResponseDTO;
 import com.birdgelabz.employee_payroll.model.EmployeeModel;
 import com.birdgelabz.employee_payroll.repository.EmployeeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -16,13 +19,15 @@ public class EmployeeServiceImpl implements IEmployeeService{
     EmployeeRepository employeeRepository;
 
 
-    public boolean saveEmployeeToDatabase(EmployeeDTO employee){
+    public ResponseEntity<EmployeeModel> saveEmployeeToDatabase(EmployeeDTO employee){
 
         EmployeeModel newEmployee = new EmployeeModel(employee.getName(),employee.getSalary());
         employeeRepository.save(newEmployee);
 
-        if(newEmployee.getName()!=null && newEmployee.getSalary()!=null) return true;
-        return false;
+        if(newEmployee.getName()!=null && newEmployee.getSalary()!=null){
+            return new ResponseEntity<EmployeeModel> (newEmployee, HttpStatus.CREATED);
+        }
+        return null;
     }
 
     public EmployeeModel getUserByIdService(Long id){
@@ -40,7 +45,7 @@ public class EmployeeServiceImpl implements IEmployeeService{
         return employeeRepository.findAll();
     }
 
-    public EmployeeModel updateEmployeeByIdService(Long id, EmployeeDTO updateEmployee){
+    public ResponseDTO updateEmployeeByIdService(Long id, EmployeeDTO updateEmployee){
         Optional<EmployeeModel> existingEmployee = employeeRepository.findById(id);
 
         if(existingEmployee.isEmpty()){
@@ -55,7 +60,7 @@ public class EmployeeServiceImpl implements IEmployeeService{
         employeeExist.setSalary(updateEmployee.getSalary());
         employeeRepository.save(employeeExist);
 
-        return employeeExist;
+        return new ResponseDTO("User has been updated", HttpStatus.OK);
     }
 
     public void deleteUserByIdService(Long id){
