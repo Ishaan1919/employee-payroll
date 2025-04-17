@@ -53,5 +53,14 @@ public class EmployeeController {
         return "Your employee has been updated";
     }
 
+    @DeleteMapping("/delete-employee-by-id/{id}")
+    public String deleteUserById(@PathVariable Long id){
+
+        employeeService.deleteUserByIdService(id);
+
+        return "User has been deleted";
+
+    }
+
 
 }

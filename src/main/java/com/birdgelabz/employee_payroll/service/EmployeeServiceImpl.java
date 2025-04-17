@@ -58,4 +58,9 @@ public class EmployeeServiceImpl implements IEmployeeService{
         return employeeExist;
     }
 
+    public void deleteUserByIdService(Long id){
+        employeeRepository.deleteById(id);
+    }
+
+
 }

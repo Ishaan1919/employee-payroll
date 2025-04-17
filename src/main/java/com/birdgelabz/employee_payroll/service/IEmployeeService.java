@@ -10,5 +10,6 @@ public interface IEmployeeService {
     public EmployeeModel getUserByIdService(Long id);
     public List<EmployeeModel> getAllUsers();
     public EmployeeModel updateEmployeeByIdService(Long id, EmployeeDTO employee);
+    public void deleteUserByIdService(Long id);
 
 }
