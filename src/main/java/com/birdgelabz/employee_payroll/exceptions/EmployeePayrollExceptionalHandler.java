@@ -20,12 +20,13 @@ public class EmployeePayrollExceptionalHandler {
     public static final String message = "Exception while processing rest request";
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
-    public ResponseEntity<Map<String, String>> handleValidationExceptions(MethodArgumentNotValidException ex) {
+    public ResponseEntity<Map<String, String>> handleValidationExceptions(MethodArgumentNotValidException exception) {
         Map<String, String> errors = new HashMap<>();
-        ex.getBindingResult().getAllErrors().forEach((error) -> {
+        exception.getBindingResult().getAllErrors().forEach((error) -> {
             String fieldName = ((FieldError) error).getField();
             String message = error.getDefaultMessage();
             errors.put(fieldName, message);
+            log.error(exception.getMessage(), fieldName);
         });
         return new ResponseEntity<>(errors, HttpStatus.BAD_REQUEST);
     }
@@ -37,12 +38,12 @@ public class EmployeePayrollExceptionalHandler {
         return new ResponseEntity<ResponseDTO>(responseDTO, HttpStatus.BAD_REQUEST);
     }
 
-    @ExceptionHandler(MethodArgumentNotValidException.class)
-    public ResponseEntity<ResponseDTO> handleMethodArgumentNotValidException(MethodArgumentNotValidException exception){
-        log.error("Invalid method call");
-        ResponseDTO responseDTO = new ResponseDTO(message,"Should have called the proper method");
-        return new ResponseEntity<ResponseDTO>(responseDTO, HttpStatus.BAD_GATEWAY);
-    }
+//    @ExceptionHandler(MethodArgumentNotValidException.class)
+//    public ResponseEntity<ResponseDTO> handleMethodArgumentNotValidException(MethodArgumentNotValidException exception){
+//        log.error("Invalid method call");
+//        ResponseDTO responseDTO = new ResponseDTO(message,"Should have called the proper method");
+//        return new ResponseEntity<ResponseDTO>(responseDTO, HttpStatus.BAD_GATEWAY);
+//    }
 
 //    @ExceptionHandler(EmployeePayrollException.class)
 //    public ResponseEntity<ResponseDTO> handleEmployeePayrollException(EmployeePayrollException exception){
