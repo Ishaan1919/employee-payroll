@@ -1,50 +1,55 @@
 package com.birdgelabz.employee_payroll.model;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import com.birdgelabz.employee_payroll.dto.EmployeeDTO;
+import jakarta.persistence.*;
+import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
+
+import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
+@Table(name = "employee_payroll")
+@Getter @Setter
 public class EmployeeModel {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long Employee;
+    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    @Column(name = "employee_id")
+    private Long employeeId;
 
+    @Column(name = "name")
     private String name;
+
+
     private Double salary;
+    private String gender;
+    private LocalDate startDate;
+    private String note;
+    private String profilePic;
 
-    public EmployeeModel(){
+    @ElementCollection
+    @CollectionTable(name = "employee_department", joinColumns = @JoinColumn(name = "id"))
+    @Column(name = "department")
+    private List<String> departments;
 
+
+    public EmployeeModel(){}
+
+    public EmployeeModel(EmployeeDTO employeeDTO){
+        this.updateEmployeeModel(employeeDTO);
     }
 
-    public EmployeeModel(String name, Double salary) {
-        this.name = name;
-        this.salary = salary;
+    public void updateEmployeeModel(EmployeeDTO employeeDTO) {
+        this.name = employeeDTO.name;
+        this.salary = employeeDTO.salary;
+        this.gender = employeeDTO.gender;
+        this.note = employeeDTO.note;
+        this.startDate = employeeDTO.startDate;
+        this.profilePic = employeeDTO.profilePic;
+        this.departments = new ArrayList<>(employeeDTO.departments);
     }
 
-    public Long getEmployee() {
-        return Employee;
-    }
-
-    public void setEmployee(Long employee) {
-        Employee = employee;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public Double getSalary() {
-        return salary;
-    }
-
-    public void setSalary(Double salary) {
-        this.salary = salary;
-    }
 }

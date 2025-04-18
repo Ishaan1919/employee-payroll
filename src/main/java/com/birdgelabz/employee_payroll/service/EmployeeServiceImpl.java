@@ -4,11 +4,13 @@ import com.birdgelabz.employee_payroll.dto.EmployeeDTO;
 import com.birdgelabz.employee_payroll.dto.ResponseDTO;
 import com.birdgelabz.employee_payroll.model.EmployeeModel;
 import com.birdgelabz.employee_payroll.repository.EmployeeRepository;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -21,13 +23,10 @@ public class EmployeeServiceImpl implements IEmployeeService{
 
     public ResponseEntity<EmployeeModel> saveEmployeeToDatabase(EmployeeDTO employee){
 
-        EmployeeModel newEmployee = new EmployeeModel(employee.getName(),employee.getSalary());
+        EmployeeModel newEmployee = new EmployeeModel(employee);
         employeeRepository.save(newEmployee);
 
-        if(newEmployee.getName()!=null && newEmployee.getSalary()!=null){
-            return new ResponseEntity<EmployeeModel> (newEmployee, HttpStatus.CREATED);
-        }
-        return null;
+        return new ResponseEntity<EmployeeModel> (newEmployee, HttpStatus.CREATED);
     }
 
     public EmployeeModel getUserByIdService(Long id){
@@ -54,10 +53,29 @@ public class EmployeeServiceImpl implements IEmployeeService{
 
         EmployeeModel employeeExist = existingEmployee.get();
 
-        if(updateEmployee.getName()!=null)
-        employeeExist.setName(updateEmployee.getName());
-        if(updateEmployee.getSalary()!=null)
-        employeeExist.setSalary(updateEmployee.getSalary());
+        if(updateEmployee.name!=null) {
+            employeeExist.setName(updateEmployee.name);
+        }
+        if(updateEmployee.salary!=null){
+                employeeExist.setSalary(updateEmployee.salary);
+        }
+        if(updateEmployee.gender!=null) {
+            employeeExist.setGender(updateEmployee.gender);
+        }
+        if(updateEmployee.startDate!=null){
+                employeeExist.setStartDate(updateEmployee.startDate);
+        }
+        if(updateEmployee.note!=null) {
+            employeeExist.setNote(updateEmployee.note);
+        }
+        if(updateEmployee.profilePic!=null){
+                employeeExist.setProfilePic(updateEmployee.profilePic);
+        }
+        if(updateEmployee.departments!=null){
+            employeeExist.setDepartments(updateEmployee.departments);
+        }
+
+
         employeeRepository.save(employeeExist);
 
         return new ResponseDTO("User has been updated", HttpStatus.OK);

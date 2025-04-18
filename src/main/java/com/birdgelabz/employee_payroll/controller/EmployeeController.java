@@ -4,14 +4,18 @@ import com.birdgelabz.employee_payroll.dto.EmployeeDTO;
 import com.birdgelabz.employee_payroll.dto.ResponseDTO;
 import com.birdgelabz.employee_payroll.model.EmployeeModel;
 import com.birdgelabz.employee_payroll.service.EmployeeServiceImpl;
+import jakarta.validation.Valid;
+import jakarta.validation.executable.ValidateOnExecution;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
 
 @RestController
+@Validated
 public class EmployeeController {
 
     @Autowired
@@ -24,7 +28,7 @@ public class EmployeeController {
     }
 
     @PostMapping("/create-employee")
-    public ResponseEntity<EmployeeModel> createEmployee(@RequestBody EmployeeDTO employee){
+    public ResponseEntity<EmployeeModel> createEmployee(@Valid @RequestBody EmployeeDTO employee){
 
         return employeeService.saveEmployeeToDatabase(employee);
 
@@ -35,7 +39,7 @@ public class EmployeeController {
 
         EmployeeModel employee = employeeService.getUserByIdService(id);
 
-        return "Name: " + employee.getName();
+        return "Name: ";
 
     }
 
